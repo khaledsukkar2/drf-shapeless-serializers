@@ -125,7 +125,7 @@ AuthorSerializer(
     nested={
         'books': {
             'serializer': BookSerializer,
-            'fields': ['title', 'publish_year'],
+            'fields': ['title', 'publish_year', 'publisher'],
             'nested': {
                 'publisher': {
                     'serializer': PublisherSerializer,
@@ -147,7 +147,7 @@ For complex nested structures, you can build and config relationships as deep as
             nested={
                 "author": {
                     "serializer": DynamicAuthorProfileSerializer,
-                    "fields": ["bio", "is_verified"],
+                    "fields": ["bio", "is_verified", 'user'],
                     "rename_fields": {"bio": "author_biography"},
                     "field_attributes": {
                         "is_verified": {"help_text": "Verified status"}
