@@ -19,7 +19,7 @@ All without creating multiple serializer classes and annoying nested relations.
 pip install drf-shapeless-serializers
 ```
 
-**Add to your Django settings:
+**Add to your Django settings**:
 ```python
 INSTALLED_APPS = [
     # ... other apps
