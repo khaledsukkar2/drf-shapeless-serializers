@@ -98,7 +98,8 @@ Pass the standard DRF serializers params in run-time
 AuthorSerializer(
     author,
     field_attributes={
-        'bio': {'help_text': 'Author biography'}
+        'bio': {'help_text': 'Author biography'},
+        'address' : {'write_only' : True }
     }
 )
 ```
@@ -203,7 +204,7 @@ For complex nested structures, you can build and config relationships as deep as
 even the very complex and deep relations are supported:
 ```python
 serializer = DynamicBlogPostSerializer(
-            self.post,
+            BlogPost.objects.all(),
             fields=["id", "title", "author", "tags", "comments", "likes"],
             nested={
                 "author": {
