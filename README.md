@@ -142,7 +142,7 @@ For complex nested structures, you can build and config relationships as deep as
 
 ```python
  serializer = DynamicBlogPostSerializer(
-            self.post1,
+           BlogPost.objects.all(),
             fields=["id", "title", "author", "comments"],
             rename_fields={"id": "post_identifier"},
             nested={
