@@ -1,5 +1,5 @@
 import datetime
-
+from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework import serializers
@@ -82,7 +82,7 @@ class TestShaplessModelSerializer(TestCase):
             author=self.author_profile1,
             content="Content about Python and Django.",
             status="published",
-            publish_date=datetime.date(2023, 1, 1),
+            publish_date=timezone.datetime(2023, 1, 1, tzinfo=timezone.get_current_timezone()),
             view_count=100,
         )
         self.post1.categories.add(self.category1)
@@ -93,7 +93,7 @@ class TestShaplessModelSerializer(TestCase):
             author=self.author_profile2,
             content="Content about AI in science.",
             status="published",
-            publish_date=datetime.date(2023, 1, 15),
+            publish_date=timezone.datetime(2023, 1, 15, tzinfo=timezone.get_current_timezone()),
             view_count=50,
         )
         self.post2.categories.add(self.category2)
@@ -104,7 +104,7 @@ class TestShaplessModelSerializer(TestCase):
             author=self.author_profile1,
             content="A short fiction piece.",
             status="draft",
-            publish_date=datetime.date(2023, 2, 1),
+            publish_date=timezone.datetime(2023, 2, 1, tzinfo=timezone.get_current_timezone()),
             view_count=10,
         )
         self.post3.categories.add(self.category3)
