@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.utils.timezone import datetime
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.test import APIRequestFactory
 
@@ -86,7 +86,7 @@ class DynamicConditionalFieldsMixinTests(TestCase):
             content="Advanced serialization techniques",
             slug="django-tips",
             status="published",
-            publish_date=datetime.now(),
+            publish_date=timezone.now(),
         )
         self.blog_post.categories.add(self.tech_category, self.science_category)
 
