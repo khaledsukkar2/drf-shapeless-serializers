@@ -6,7 +6,7 @@
 Tired of serializer hell? Every Django REST Framework developer knows the pain of creating countless serializer variations for slightly different API endpoints, duplicating code for simple field variations, struggling with rigid and complex nested relationships, and maintaining sprawling serializer classes.
 
 What if you could eliminate 80% of your serializer code? `drf-shapeless-serializers` revolutionizes API development by giving you runtime serializer superpowers. Instead of creating multiple serializer classes , configure everything on the fly with one serializer to rule them all.
-Now you can shape your serializers like Rubik's Cube - rearranging fields, nesting relationships, and transforming outputs dynamically with unlimited flexibility.
+Now you can shape your serializers like Lego cubes - rearranging fields, nesting relationships, and transforming outputs dynamically with unlimited flexibility.
 
 ## Overview
 
@@ -19,7 +19,7 @@ All without creating multiple serializer classes and annoying nested relations.
 pip install drf-shapeless-serializers
 ```
 
-**Add to your Django settings:
+**Add to your Django settings**:
 ```python
 INSTALLED_APPS = [
     # ... other apps
@@ -98,7 +98,8 @@ Pass the standard DRF serializers params in run-time
 AuthorSerializer(
     author,
     field_attributes={
-        'bio': {'help_text': 'Author biography'}
+        'bio': {'help_text': 'Author biography'},
+        'address' : {'write_only' : True }
     }
 )
 ```
@@ -125,7 +126,7 @@ AuthorSerializer(
     nested={
         'books': {
             'serializer': BookSerializer,
-            'fields': ['title', 'publish_year'],
+            'fields': ['title', 'publish_year', 'publisher'],
             'nested': {
                 'publisher': {
                     'serializer': PublisherSerializer,
@@ -141,13 +142,13 @@ For complex nested structures, you can build and config relationships as deep as
 
 ```python
  serializer = DynamicBlogPostSerializer(
-            self.post1,
+           BlogPost.objects.all(),
             fields=["id", "title", "author", "comments"],
             rename_fields={"id": "post_identifier"},
             nested={
                 "author": {
                     "serializer": DynamicAuthorProfileSerializer,
-                    "fields": ["bio", "is_verified"],
+                    "fields": ["bio", "is_verified", 'user'],
                     "rename_fields": {"bio": "author_biography"},
                     "field_attributes": {
                         "is_verified": {"help_text": "Verified status"}
@@ -203,7 +204,7 @@ For complex nested structures, you can build and config relationships as deep as
 even the very complex and deep relations are supported:
 ```python
 serializer = DynamicBlogPostSerializer(
-            self.post,
+            BlogPost.objects.all(),
             fields=["id", "title", "author", "tags", "comments", "likes"],
             nested={
                 "author": {
