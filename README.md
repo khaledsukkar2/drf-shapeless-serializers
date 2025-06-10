@@ -245,6 +245,7 @@ serializer = DynamicBlogPostSerializer(
                         }
 
                     },
+                    },
 
                 },
              )
