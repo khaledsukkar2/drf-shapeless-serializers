@@ -1,5 +1,5 @@
 
-# DRF-Shapeless-Serializers Package
+# drf-shapeless-serializers 
 
 ## Motivation
 
