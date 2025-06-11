@@ -53,6 +53,7 @@ class BookSerializer(ShapelessModelSerializer):
 
 2. **Configure dynamically in views**:
 ```python
+@api_view(['GET'])
 def book_detail(request, pk):
     book = Book.objects.get(pk=pk)
     serializer = BookSerializer(
@@ -141,8 +142,9 @@ AuthorSerializer(
 For complex nested structures, you can build and config relationships as deep as your API requires:
 
 ```python
+ posts = BlogPost.objects.all()
  serializer = DynamicBlogPostSerializer(
-           BlogPost.objects.all(),
+           posts,
             fields=["id", "title", "author", "comments"],
             rename_fields={"id": "post_identifier"},
             nested={
@@ -164,7 +166,7 @@ For complex nested structures, you can build and config relationships as deep as
                 "comments": {
                     "serializer": DynamicCommentSerializer,
                     "fields": ["id", "content", "user", "replies"],
-                    "instance": self.post1.comments.filter(
+                    "instance": posts.comments.filter(
                         is_approved=True, parent__isnull=True
                     ),
                     "rename_fields": {"content": "comment_text"},
@@ -203,8 +205,9 @@ For complex nested structures, you can build and config relationships as deep as
 
 even the very complex and deep relations are supported:
 ```python
+posts =  BlogPost.objects.all()
 serializer = DynamicBlogPostSerializer(
-            BlogPost.objects.all(),
+            posts,
             fields=["id", "title", "author", "tags", "comments", "likes"],
             nested={
                 "author": {
