@@ -8,10 +8,11 @@ Looking for help with:
 -  any type of optimizations or improvements
 - Test coverage
 - Documentation
-- Any new features are welcomed
 - DRF compatibility
 - support generic api docs
 - add validators on-fly feature
+- Any new features are welcomed
+
   
 ## Getting Started
 
