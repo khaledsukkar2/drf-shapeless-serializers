@@ -1,7 +1,18 @@
 # Contributing to DRF Shapeless Serializers
 
-We welcome contributions! Here's how to get started:
+We welcome contributions!:
 
+## Contribution Areas
+
+Looking for help with:
+-  any type of optimizations or improvements
+- Test coverage
+- Documentation
+- Any new features are welcomed
+- DRF compatibility
+- support generic api docs
+- add validators on-fly feature
+  
 ## Getting Started
 
 1. **Fork the repository** on GitHub
@@ -40,13 +51,6 @@ We welcome contributions! Here's how to get started:
    ```
 2. Open a Pull Request from your fork to the main repository
 
-## Contribution Areas
 
-Looking for help with:
--  any type of optimizations or improvements
-- Test coverage
-- Documentation
-- New features
-- DRF compatibility
 
 Thanks for contributing!
