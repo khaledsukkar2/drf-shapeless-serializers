@@ -33,25 +33,15 @@ Looking for help with:
 
 ## Making Changes
 
-1. Create a new branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-2. Implement your changes following PEP 8 style
-3. Add tests for your changes
-4. Run tests:
+1. Implement your changes
+2. Add tests for your changes
+3. Run tests:
    ```bash
    python manage.py test
    ```
-
+   
 ## Submitting Changes
-
-1. Push to your fork:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-2. Open a Pull Request from your fork to the main repository
-
+ Open a Pull Request from your fork to the main repository
 
 
 Thanks for contributing!
