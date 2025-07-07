@@ -9,6 +9,7 @@ class Author(models.Model):
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
     publication_date = models.DateField()
 
 
@@ -51,7 +52,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Tag(models.Model):
     name = models.CharField(max_length=30, unique=True)
