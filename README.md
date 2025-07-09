@@ -1,5 +1,6 @@
 
 # drf-shapeless-serializers 
+[![Published on Django Packages](https://img.shields.io/badge/Published%20on-Django%20Packages-0c3c26)](https://djangopackages.org/packages/p/drf-shapeless-serializers/)
 
 ## Motivation
 
