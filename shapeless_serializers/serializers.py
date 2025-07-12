@@ -28,7 +28,17 @@ class ShapelessModelSerializer(
     DynamicConditionalFieldsMixin,
     serializers.ModelSerializer,
 ):
-    pass
+    def __init__(self, *args, **kwargs):
+        self._field_validators = kwargs.pop('field_validators', {})
+        self._dynamic_validators = kwargs.pop('validators', None)
+        super().__init__(*args, **kwargs)
+
+        for field_name, validators in self._field_validators.items():
+            if field_name in self.fields:
+                self.fields[field_name].validators += validators
+
+        if self._dynamic_validators is not None:
+            self.Meta.validators = self._dynamic_validators
 
 
 class ShapelessHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):

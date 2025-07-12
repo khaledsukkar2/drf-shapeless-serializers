@@ -1,5 +1,6 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from .models import Book
 
 from .serializers import (
@@ -9,6 +10,7 @@ from .serializers import (
 
 from rest_framework.validators import (
     UniqueValidator,
+    UniqueTogetherValidator
 )
 from django.core.validators import MinValueValidator
 
@@ -39,20 +41,30 @@ def book_detail(request, pk):
 
     return Response(serializer.data)
 
+
 @api_view(['POST'])
 def create_book(request):
+
     field_validators = {
         "title": [UniqueValidator(queryset=Book.objects.all())],
-        "price": [MinValueValidator(0)]
+        "price": [MinValueValidator(0)],
     }
+
+    meta_validators = [
+        UniqueTogetherValidator(
+            queryset=Book.objects.all(),
+            fields=["title", "author"]
+        )
+    ]
 
     serializer = DynamicBookSerializer(
         data=request.data,
-        fields=['title', 'price'],
-        field_validators=field_validators
+        fields=["title", "price", "author"],
+        field_validators=field_validators,
+        meta_validators=meta_validators
     )
 
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=201)
-    return Response(serializer.errors, status=400)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
