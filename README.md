@@ -284,3 +284,15 @@ This project is licensed under the MIT License. See the LICENSE file for details
 ## Acknowledgements
 
 Inspired by the flexibility needs of complex API systems. Special thanks to the Django REST Framework community for their foundational work .
+
+### Dynamic validators
+You can now pass `validators` (Meta) and `field_validators` on-the-fly to any `ShapelessModelSerializer`:
+
+```python
+    serializer = BookSerializer(
+    data=request.data,
+    field_validators={"price": [MinValueValidator(0)]},
+    validators=[
+        UniqueTogetherValidator(queryset=Book.objects.all(), fields=["title", "author"])
+    ]
+)
