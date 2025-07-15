@@ -19,6 +19,3 @@ python:
 formats:
   - pdf
   - epub
-
-mkdocs:
-  configuration: mkdocs.yml 
