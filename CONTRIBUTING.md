@@ -1,7 +1,19 @@
 # Contributing to DRF Shapeless Serializers
 
-We welcome contributions! Here's how to get started:
+We welcome contributions!:
 
+## Contribution Areas
+
+Looking for help with:
+-  any type of optimizations or improvements
+- Test coverage
+- Documentation
+- DRF compatibility
+- support generic api docs
+- add validators on-fly feature
+- Any new features are welcomed
+
+  
 ## Getting Started
 
 1. **Fork the repository** on GitHub
@@ -21,32 +33,15 @@ We welcome contributions! Here's how to get started:
 
 ## Making Changes
 
-1. Create a new branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-2. Implement your changes following PEP 8 style
-3. Add tests for your changes
-4. Run tests:
+1. Implement your changes
+2. Add tests for your changes
+3. Run tests:
    ```bash
    python manage.py test
    ```
-
+   
 ## Submitting Changes
+ Open a Pull Request from your fork to the main repository
 
-1. Push to your fork:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-2. Open a Pull Request from your fork to the main repository
-
-## Contribution Areas
-
-Looking for help with:
--  any type of optimizations or improvements
-- Test coverage
-- Documentation
-- New features
-- DRF compatibility
 
 Thanks for contributing!

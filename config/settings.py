@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "rest_framework",
-    "test_app",
+    'rest_framework',
+    'test_app',
+    'shapeless_serializers'
 ]
 
 MIDDLEWARE = [
