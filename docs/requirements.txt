@@ -1,4 +1,5 @@
 sphinx
 sphinx-rtd-theme
 djangorestframework
+sphinx-copybutton
 myst-parser
