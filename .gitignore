@@ -40,3 +40,5 @@ pipfile
 poetry.lock
 db.sqlite3
 pyproject.toml
+.idea/
+
