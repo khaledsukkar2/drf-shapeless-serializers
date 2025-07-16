@@ -13,23 +13,23 @@ Example 1: Simple data transformation
 
 .. code-block:: python
 
-   from shapeless_serializers.serializers import ShapelessSerializer
-   from rest_framework import serializers
+    from shapeless_serializers.serializers import ShapelessSerializer
+    from rest_framework import serializers
 
-   class SurveySerializer(ShapelessSerializer):
-       name = serializers.CharField()
-       age = serializers.IntegerField()
-       email = serializers.EmailField()
+    class SurveySerializer(ShapelessSerializer):
+        name = serializers.CharField()
+        age = serializers.IntegerField()
+        email = serializers.EmailField()
 
-   # Usage
-   data = {'name': 'John', 'age': 30, 'email': 'john@example.com'}
-   serializer = SurveySerializer(
-       data=data,
-       fields=['name', 'email'],
-       rename_fields={'email': 'contact_email'}
-   )
-   serializer.is_valid()
-   print(serializer.data)  # {'name': 'John', 'contact_email': 'john@example.com'}
+    # Usage
+    data = {'name': 'John', 'age': 30, 'email': 'john@example.com'}
+    serializer = SurveySerializer(
+        data=data,
+        fields=['name', 'email'],
+        rename_fields={'email': 'contact_email'}
+    )
+    serializer.is_valid()
+    print(serializer.data)  # {'name': 'John', 'contact_email': 'john@example.com'}
 
 Example 2: Complex nested structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -79,7 +79,7 @@ Example 1: Basic model serialization
    )
 
 Example 2: Advanced nested relationships
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
