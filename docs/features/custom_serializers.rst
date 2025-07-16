@@ -1,10 +1,10 @@
 Creating Custom Shapeless Serializers
-====================================
+=====================================
 
 For developers who need only specific features, you can create your own serializer combinations by mixing individual components.
 
 Why Build Custom Serializers?
-----------------------------
+-----------------------------
 - Reduce overhead by including only what you need
 - Create specialized serializers for different parts of your application
 - Maintain finer control over serializer behavior
@@ -31,50 +31,49 @@ Available Mixins
 +---------------------------+--------------------------------------------------------------+
 
 Basic Custom Serializer Examples
--------------------------------
+--------------------------------
 
 Field Selection Only
 ~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
-   from rest_framework import serializers
-   from shapeless_serializers.mixins import DynamicFieldsMixin
+    from rest_framework import serializers
+    from shapeless_serializers.mixins import DynamicFieldsMixin
 
-   class LightweightSerializer(DynamicFieldsMixin, serializers.Serializer):
-       """Only includes dynamic field selection"""
-       pass
+    class LightweightSerializer(DynamicFieldsMixin, serializers.Serializer):
+        """Only includes dynamic field selection"""
+        pass
 
 Field Selection + Renaming
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    from rest_framework import serializers
+    from shapeless_serializers.mixins import (
+        DynamicFieldsMixin,
+        DynamicFieldRenamingMixin
+    )
+
+    class ReportingSerializer(DynamicFieldsMixin, 
+                            DynamicFieldRenamingMixin,
+                            serializers.ModelSerializer):
+        """For external reporting with custom field names"""
+        pass
+
+Nested Relationships Only
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
-   from rest_framework import serializers
-   from shapeless_serializers.mixins import (
-       DynamicFieldsMixin,
-       DynamicFieldRenamingMixin
-   )
+    from rest_framework import serializers
+    from shapeless_serializers.mixins import DynamicNestedSerializerMixin
 
-   class ReportingSerializer(DynamicFieldsMixin, 
-                           DynamicFieldRenamingMixin,
-                           serializers.ModelSerializer):
-       """For external reporting with custom field names"""
-       pass
-
-Nested Relationships Only
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   from rest_framework import serializers
-   from shapeless_serializers.mixins import DynamicNestedSerializerMixin
-
-   class NestedOnlySerializer(DynamicNestedSerializerMixin,
-                             serializers.ModelSerializer):
-       """Just handles dynamic nested relationships"""
-       pass
-
+    class NestedOnlySerializer(DynamicNestedSerializerMixin,
+                              serializers.ModelSerializer):
+        """Just handles dynamic nested relationships"""
+        pass
 
 See Also
 --------

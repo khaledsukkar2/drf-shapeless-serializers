@@ -1,5 +1,5 @@
 Field Attributes
-===============
+================
 
 The Field Attributes feature allows you to dynamically modify serializer field attributes at runtime. This enables you to change field behavior without creating multiple serializer classes.
 
@@ -10,45 +10,45 @@ To modify field attributes, pass a ``field_attributes`` dictionary when instanti
 
 .. code-block:: python
 
-   serializer = BlogPostSerializer(
-       instance=post,
-       field_attributes={
-           'title': {'write_only': True},
-           'content': {'read_only': False}
-       }
-   )
+    serializer = BlogPostSerializer(
+        instance=post,
+        field_attributes={
+            'title': {'write_only': True},
+            'content': {'read_only': False}
+        }
+    )
 
 Supported Attribute Types
 -------------------------
 
 Static Attributes
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 Direct value assignments:
 
 .. code-block:: python
 
-   {
-       'title': {'required': True},
-       'content': {'help_text': 'Main post content'}
-   }
+    {
+        'title': {'required': True},
+        'content': {'help_text': 'Main post content'}
+    }
 
 Callable Attributes
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 Functions that receive ``(instance, context)`` and return the attribute value:
 
 .. code-block:: python
 
-   def make_write_only(instance, context):
-       return not context['request'].user.is_staff
+    def make_write_only(instance, context):
+        return not context['request'].user.is_staff
 
-   {
-       'secret_field': {'write_only': make_write_only}
-   }
+    {
+        'secret_field': {'write_only': make_write_only}
+    }
 
 Common Attributes
-----------------
+-----------------
 
 +-------------------+--------------------------------------------------+-----------------------+
 | Attribute         | Description                                      | Example Value         |
@@ -67,43 +67,41 @@ Common Attributes
 +-------------------+--------------------------------------------------+-----------------------+
 
 Examples
-----------------
+--------
 
 API Versioning
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 Change field behavior between API versions:
 
 .. code-block:: python
 
-   def get_version_attributes(version):
-       if version == 'v1':
-           return {'legacy_id': {'required': True}}
-       return {'uuid': {'required': True}}
+    def get_version_attributes(version):
+        if version == 'v1':
+            return {'legacy_id': {'required': True}}
+        return {'uuid': {'required': True}}
 
-   attributes = get_version_attributes(request.version)
-   serializer = ResourceSerializer(resource, field_attributes=attributes)
-
+    attributes = get_version_attributes(request.version)
+    serializer = ResourceSerializer(resource, field_attributes=attributes)
 
 Combining with Other Features
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Field attributes work well with other dynamic features:
 
 .. code-block:: python
 
-   serializer = BlogPostSerializer(
-       post,
-       fields=['id', 'title', 'content'],
-       field_attributes={
-           'content': {'write_only': True}
-       },
-       rename_fields={'id': 'post_id'}
-   )
-
+    serializer = BlogPostSerializer(
+        post,
+        fields=['id', 'title', 'content'],
+        field_attributes={
+            'content': {'write_only': True}
+        },
+        rename_fields={'id': 'post_id'}
+    )
 
 Error Handling
--------------
+--------------
 
 - Invalid attribute dictionaries raise ``DynamicSerializerConfigError``
 - Non-existent fields are silently ignored

@@ -39,7 +39,7 @@ Common Patterns
 ---------------
 
 Basic Field Selection
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -49,7 +49,7 @@ Basic Field Selection
    )
 
 Field Renaming
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -62,7 +62,7 @@ Field Renaming
    )
 
 Simple Nesting
-~~~~~~~~~~~~~
+~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -77,7 +77,7 @@ Simple Nesting
    )
 
 Conditional Fields
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -92,6 +92,7 @@ Next Steps
 ----------
 
 After this quickstart, explore:
-- :doc:`features/dynamic_fields` for advanced field selection
-- :doc:`features/nested_serializers` for complex relationships
-- :doc:`mixins for ultimate customization` for building your own shapeless serializers
+
+* :doc:`features/dynamic_fields` for advanced field selection
+* :doc:`features/nested_serializers` for complex relationships
+* :doc:`features/custom_serializers` for building your own mixins

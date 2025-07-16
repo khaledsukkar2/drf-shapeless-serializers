@@ -4,11 +4,12 @@ Examples
 This document provides practical examples for all serializer types in the Shapeless Serializers package.
 
 Basic Serializer (ShapelessSerializer)
--------------------------------------
+--------------------------------------
 
 Use this for non-model serialization with full dynamic capabilities.
 
-**Example 1: Simple data transformation**
+Example 1: Simple data transformation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -30,7 +31,8 @@ Use this for non-model serialization with full dynamic capabilities.
    serializer.is_valid()
    print(serializer.data)  # {'name': 'John', 'contact_email': 'john@example.com'}
 
-**Example 2: Complex nested structure**
+Example 2: Complex nested structure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -51,11 +53,12 @@ Use this for non-model serialization with full dynamic capabilities.
    )
 
 Model Serializer (ShapelessModelSerializer)
-------------------------------------------
+-------------------------------------------
 
 The most commonly used serializer for Django models.
 
-**Example 1: Basic model serialization**
+Example 1: Basic model serialization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -75,7 +78,8 @@ The most commonly used serializer for Django models.
        rename_fields={'price': 'current_price'}
    )
 
-**Example 2: Advanced nested relationships**
+Example 2: Advanced nested relationships
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -100,11 +104,12 @@ The most commonly used serializer for Django models.
    )
 
 Hyperlinked Model Serializer (ShapelessHyperlinkedModelSerializer)
------------------------------------------------------------------
+------------------------------------------------------------------
 
 Use this when you need hyperlinked relationships in your API.
 
-**Example 1: Basic hyperlinked serialization**
+Example 1: Basic hyperlinked serialization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -125,7 +130,8 @@ Use this when you need hyperlinked relationships in your API.
        rename_fields={'url': 'self_link'}
    )
 
-**Example 2: Complex hyperlinked relationships**
+Example 2: Complex hyperlinked relationships
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -148,8 +154,8 @@ Use this when you need hyperlinked relationships in your API.
        }
    )
 
-
-**Example: API Versioning Pattern**
+API Versioning Pattern
+----------------------
 
 .. code-block:: python
 
@@ -186,6 +192,6 @@ Use this when you need hyperlinked relationships in your API.
 See Also
 --------
 
-- :doc:`../features/dynamic_fields` - For controlling top-level fields
-- :doc:`../features/field_attributes` - For modifying nested field behavior
-- :doc:`../features/custom_serializers.rst` - For creating custom dynamic serializers
+* :doc:`features/dynamic_fields`
+* :doc:`features/field_attributes` 
+* :doc:`features/custom_serializers`

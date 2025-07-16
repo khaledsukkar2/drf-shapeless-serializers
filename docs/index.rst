@@ -14,6 +14,5 @@ Eliminate serializer hell with dynamic runtime configuration. Shape your seriali
    features/field_renaming
    features/conditional_fields
    features/nested_serializers
-   mixins for ultimate customization
-   examples
    features/custom_serializers
+   examples

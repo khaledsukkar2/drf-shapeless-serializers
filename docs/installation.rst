@@ -2,14 +2,14 @@ Installation
 ============
 
 Prerequisites
-------------
+-------------
 
-- Python 3.9+
-- Django 3.2+
-- Django REST Framework 3.12+
+* Python 3.9+
+* Django 3.2+
+* Django REST Framework 3.12+
 
 Package Installation
--------------------
+--------------------
 
 Install the package using pip:
 
@@ -18,7 +18,7 @@ Install the package using pip:
    pip install drf-shapeless-serializers
 
 Django Configuration
--------------------
+--------------------
 
 Add the package to your ``INSTALLED_APPS``:
 
@@ -28,7 +28,6 @@ Add the package to your ``INSTALLED_APPS``:
        # ... other apps
        'shapeless_serializers',
    ]
-
 
 Upgrading
 ---------

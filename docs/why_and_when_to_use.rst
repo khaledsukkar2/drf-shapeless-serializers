@@ -6,36 +6,36 @@ Motivation
 
 Traditional Django REST Framework serializers often lead to what's known as "serializer hell" - a situation where developers:
 
-- Create numerous serializer variations for slightly different API endpoints
-- Duplicate code for simple field variations
-- Struggle with rigid and complex nested relationships
-- Maintain sprawling serializer classes that become hard to manage
+* Create numerous serializer variations for slightly different API endpoints
+* Duplicate code for simple field variations
+* Struggle with rigid and complex nested relationships
+* Maintain sprawling serializer classes that become hard to manage
 
 Shapeless Serializers were created to solve these pain points by introducing dynamic runtime configuration capabilities, allowing you to eliminate up to 80% of your serializer code while gaining unprecedented flexibility.
 
 Problems Solved
---------------
+---------------
 
 Shapeless Serializers address several common Django development challenges:
 
 1. **Serializer Proliferation**
-   - Eliminates the need to create multiple serializer classes for minor variations
-   - Replaces countless serializer subclasses with runtime configuration
+   * Eliminates the need to create multiple serializer classes for minor variations
+   * Replaces countless serializer subclasses with runtime configuration
 
 2. **Nested Relationship Complexity**
-   - Simplifies complex nested structures with dynamic configuration
-   - Allows unlimited nesting levels with per-level customization
+   * Simplifies complex nested structures with dynamic configuration
+   * Allows unlimited nesting levels with per-level customization
 
 3. **API Versioning and Variations**
-   - Easily creates different views of the same data without code duplication
-   - Simplifies supporting multiple API versions or client-specific formats
+   * Easily creates different views of the same data without code duplication
+   * Simplifies supporting multiple API versions or client-specific formats
 
 4. **Rapid API Evolution**
-   - Enables quick adaptation to changing requirements without serializer changes
-   - Reduces refactoring needs when data presentation requirements change
+   * Enables quick adaptation to changing requirements without serializer changes
+   * Reduces refactoring needs when data presentation requirements change
 
 Comparison with Traditional Serializers
---------------------------------------
+---------------------------------------
 
 +---------------------------+--------------------------------+--------------------------------+
 | Aspect                    | Traditional Serializers        | Shapeless Serializers          |
@@ -53,24 +53,30 @@ Comparison with Traditional Serializers
 | Code Reuse                | Limited by inheritance         | Maximum through configuration  |
 +---------------------------+--------------------------------+--------------------------------+
 
-we provide all the DRF serializers with these features `ShapelessSerializer`, `ShapelessModelSerializer` and `ShapelessHyperlinkedModelSerializer`.
+We provide all the DRF serializers with these features:
+
+* ``ShapelessSerializer``
+* ``ShapelessModelSerializer``
+* ``ShapelessHyperlinkedModelSerializer``
 
 When to Use
 -----------
 
 **Good Use Cases:**
 
-✔ Building public APIs with multiple versions or client-specific formats  
-✔ Projects needing different views of the same data (e.g., admin vs public)  
-✔ Rapidly evolving APIs where requirements change frequently  
-✔ Complex nested data structures that need flexible presentation  
-✔ Microservices with varying data representation needs  
-✔ Any project where serializer classes are becoming unmanageable  
+* Building public APIs with multiple versions or client-specific formats
+* Projects needing different views of the same data (e.g., admin vs public)
+* Rapidly evolving APIs where requirements change frequently
+* Complex nested data structures that need flexible presentation
+* Microservices with varying data representation needs
+* Any project where serializer classes are becoming unmanageable
 
 **When Not to Use:**
 
-✖ Extremely simple APIs with fixed, unchanging output formats  
-✖ Projects with very limited nesting or relationship requirements  
+* Extremely simple APIs with fixed, unchanging output formats
+* Performance-critical endpoints where minimal overhead is essential
+* Cases where strict schema enforcement is required at class level
+* Projects with very limited nesting or relationship requirements
 
 Performance Considerations
 --------------------------
@@ -79,6 +85,6 @@ While Shapeless Serializers add some runtime overhead due to their dynamic natur
 
 For maximum performance in critical paths, consider:
 
-- Using simpler configurations
-- Caching serializer outputs when possible
-- Falling back to traditional serializers for ultra-high-performance endpoints
+* Using simpler configurations
+* Caching serializer outputs when possible
+* Falling back to traditional serializers for ultra-high-performance endpoints
