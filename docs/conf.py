@@ -59,4 +59,7 @@ html_show_sourcelink = False
 html_show_sphinx = False
 html_last_updated_fmt = "%b %d, %Y"
 
+html_title = 'DRF Shapeless Serializers Documentation'
+html_short_title = 'DRF Shapeless Serializers'
+
 autosectionlabel_prefix_document = True
