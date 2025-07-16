@@ -11,24 +11,19 @@ Why Build Custom Serializers?
 
 Available Mixins
 ----------------
-
-+---------------------------+--------------------------------------------------------------+
-| Mixin                     | Description                                                  |
-+===========================+==============================================================+
-| ``DynamicFieldsMixin``    | Select which fields to include at runtime                    |
-+---------------------------+--------------------------------------------------------------+
-| ``DynamicFieldAttributes``| Modify field attributes (read_only, write_only, etc.)        |
-| ``Mixin``                 |                                                              |
-+---------------------------+--------------------------------------------------------------+
-| ``DynamicFieldRenaming``  | Rename output fields without changing models                 |
-| ``Mixin``                 |                                                              |
-+---------------------------+--------------------------------------------------------------+
-| ``DynamicNestedSerializer``| Configure nested relationships dynamically                   |
-| ``Mixin``                 |                                                              |
-+---------------------------+--------------------------------------------------------------+
-| ``DynamicConditionalFields``| Include/exclude fields based on conditions                   |
-| ``Mixin``                 |                                                              |
-+---------------------------+--------------------------------------------------------------+
++--------------------------------+--------------------------------------------------------------+
+| Mixin                          |  Description                                                 |
++================================+==============================================================+
+| ``DynamicFieldsMixin``         |     Select which fields to include at runtime                |
++--------------------------------+--------------------------------------------------------------+
+| ``DynamicFieldAttributesMixin``|     Modify field attributes (read_only, write_only, etc.)    |
++--------------------------------+--------------------------------------------------------------+
+| ``DynamicFieldRenamingMixin``  |     Rename output fields without changing models             |
++--------------------------------+--------------------------------------------------------------+
+| ``DynamicNestedSerializerMixin``|    Configure nested relationships dynamically               |
++--------------------------------+--------------------------------------------------------------+
+| ``DynamicConditionalFieldsMixin``|   Include/exclude fields based on conditions               |
++--------------------------------+--------------------------------------------------------------+
 
 Basic Custom Serializer Examples
 --------------------------------

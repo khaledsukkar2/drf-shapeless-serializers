@@ -23,25 +23,25 @@ Configure nested relationships using the ``nested`` parameter:
 Nested Configuration Options
 ----------------------------
 
-+-------------------+--------------------------------------------------+--------------------------------+
-| Option            | Description                                      | Example                        |
-+===================+==================================================+================================+
-| ``serializer``    | Serializer class to use for the relationship     | ``AuthorSerializer``           |
-+-------------------+--------------------------------------------------+--------------------------------+
-| ``fields``        | Fields to include from nested serializer         | ``['id', 'name']``             |
-+-------------------+--------------------------------------------------+--------------------------------+
-| ``rename_fields`` | Field name mappings for output                   | ``{'id': 'author_id'}``        |
-+-------------------+--------------------------------------------------+--------------------------------+
-| ``field_attrs``   | Dynamic field attributes                         | ``{'bio': {'write_only': True}}``|
-+-------------------+--------------------------------------------------+--------------------------------+
-| ``conditional``   | Conditional field inclusion                      | ``{'email': lambda i,c: ...}`` |
-+-------------------+--------------------------------------------------+--------------------------------+
-| ``nested``        | Further nested relationships                     | (see deep nesting example)     |
-+-------------------+--------------------------------------------------+--------------------------------+
-| ``many``          | For many-to-many relationships (default: auto)   | ``True``/``False``             |
-+-------------------+--------------------------------------------------+--------------------------------+
-| ``instance``      | Custom queryset/instance for the relationship    | ``post.comments.filter(...)``  |
-+-------------------+--------------------------------------------------+--------------------------------+
++-------------------+--------------------------------------------------+
+| Option            | Description                                      |                       
++===================+==================================================+
+| ``serializer``    | Serializer class to use for the relationship     |
++-------------------+--------------------------------------------------+
+| ``fields``        | Fields to include from nested serializer         | 
++-------------------+--------------------------------------------------+
+| ``rename_fields`` | Field name mappings for output                   | 
++-------------------+--------------------------------------------------+
+| ``field_attrs``   | Dynamic field attributes                         | 
++-------------------+--------------------------------------------------+
+| ``conditional``   | Conditional field inclusion                      | 
++-------------------+--------------------------------------------------+
+| ``nested``        | Further nested relationships                     | 
++-------------------+--------------------------------------------------+
+| ``many``          | For many-to-many relationships (default: auto)   | 
++-------------------+--------------------------------------------------+
+| ``instance``      | Custom queryset/instance for the relationship    | 
++-------------------+--------------------------------------------------+
 
 .. note::
     To enable features such as field renaming and dynamic fields, nested serializers must inherit from either shapeless serializers or appropriate mixins.
@@ -149,7 +149,7 @@ Example With Complex Relationships
     )
 
 Example with Very Deep Relationships
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 

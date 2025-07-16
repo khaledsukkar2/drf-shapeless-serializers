@@ -23,16 +23,12 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.intersphinx",
     "sphinx.ext.autosectionlabel",
-    # "sphinx_copybutton",
+    "sphinx_copybutton",
 ]
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
-    "django": (
-        "https://docs.djangoproject.com/en/stable/",
-        "https://docs.djangoproject.com/en/stable/_objects/",
-    ),
-    "drf": ("https://www.django-rest-framework.org/", None),
+    "django": ("https://docs.djangoproject.com/en/5.2/", None),
 }
 
 napoleon_google_docstring = True
@@ -57,7 +53,7 @@ html_theme_options = {
     "includehidden": True,
     "titles_only": False,
 }
-html_static_path = ["_static"]
+# html_static_path = ["_static"]
 html_css_files = ["custom.css"]
 html_show_sourcelink = False
 html_show_sphinx = False
