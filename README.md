@@ -9,6 +9,9 @@ Tired of serializer hell? Every Django REST Framework developer knows the pain o
 What if you could eliminate 80% of your serializer code? `drf-shapeless-serializers` revolutionizes API development by giving you runtime serializer superpowers. Instead of creating multiple serializer classes , configure everything on the fly with one serializer to rule them all.
 Now you can shape your serializers like Lego bricks - rearranging fields, nesting relationships, and transforming outputs dynamically with unlimited flexibility.
 
+## Documentation
+https://drf-shapeless-serializers.readthedocs.io/en/latest/
+
 ## Overview
 
 `drf-shapeless-serializers`  provides powerful mixins that extend Django REST Framework's serializers with dynamic configuration capabilities. By inheriting from our base classes, you can select fields at runtime, rename output keys dynamically, modify field attributes per-request, add and configure nested relationships on-the-fly and apply conditional field logic.
