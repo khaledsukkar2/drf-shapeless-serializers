@@ -21,7 +21,6 @@ Example 1: Simple data transformation
         age = serializers.IntegerField()
         email = serializers.EmailField()
 
-    # Usage
     data = {'name': 'John', 'age': 30, 'email': 'john@example.com'}
     serializer = SurveySerializer(
         data=data,
