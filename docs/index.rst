@@ -1,6 +1,8 @@
 DRF Shapeless Serializers Documentation
 =======================================
 
+Welcome to the DRF Shapeless Serializers documentation.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
