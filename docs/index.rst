@@ -16,4 +16,5 @@ Welcome to the DRF Shapeless Serializers documentation.
    features/conditional_fields
    features/nested_serializers
    features/custom_serializers
+   features/inline_dynamic_serializers
    examples
