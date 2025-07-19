@@ -1,15 +1,15 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from shapeless_serializers.serializers import InlineDynamicModelSerializer
+from shapeless_serializers.serializers import InlineShapelessModelSerializer
 from shapeless_serializers.exceptions import DynamicSerializerConfigError
 from test_app.models import Author, Book, BlogPost, AuthorProfile, Tag, Category
 
 User = get_user_model()
 
 
-class InlineDynamicModelSerializerTests(TestCase):
-    """Tests for the InlineDynamicModelSerializer class."""
+class InlineShapelessModelSerializerTests(TestCase):
+    """Tests for the InlineShapelessModelSerializer class."""
 
     def setUp(self):
         # Create test users
@@ -46,9 +46,9 @@ class InlineDynamicModelSerializerTests(TestCase):
         self.category1 = Category.objects.create(name="Technology", slug="tech")
 
     def test_inline_serializer_with_model(self):
-        """Test that InlineDynamicModelSerializer correctly sets model and fields."""
+        """Test that InlineShapelessModelSerializer correctly sets model and fields."""
         # Create an inline serializer with a model
-        serializer = InlineDynamicModelSerializer(self.author1, model=Author)
+        serializer = InlineShapelessModelSerializer(self.author1, model=Author)
         
         # Check that the serializer has the correct model and fields
         self.assertEqual(serializer.Meta.model, Author)
@@ -62,9 +62,9 @@ class InlineDynamicModelSerializerTests(TestCase):
         self.assertEqual(data['bio'], 'Author biography')
 
     def test_inline_serializer_with_fields(self):
-        """Test that InlineDynamicModelSerializer works with fields parameter."""
+        """Test that InlineShapelessModelSerializer works with fields parameter."""
         # Create an inline serializer with a model and fields
-        serializer = InlineDynamicModelSerializer(
+        serializer = InlineShapelessModelSerializer(
             self.book1, 
             model=Book, 
             fields=['title', 'price']
@@ -79,15 +79,15 @@ class InlineDynamicModelSerializerTests(TestCase):
         self.assertEqual(float(data['price']), 29.99)
 
     def test_inline_serializer_with_nested(self):
-        """Test that InlineDynamicModelSerializer works with nested parameter."""
+        """Test that InlineShapelessModelSerializer works with nested parameter."""
         # Create an inline serializer with nested relationships
-        serializer = InlineDynamicModelSerializer(
+        serializer = InlineShapelessModelSerializer(
             self.book1,
             model=Book,
             fields=['title', 'author'],
             nested={
                 'author': {
-                    'serializer': InlineDynamicModelSerializer,
+                    'serializer': InlineShapelessModelSerializer,
                     'model': Author,
                     'fields': ['name']
                 }
@@ -101,9 +101,9 @@ class InlineDynamicModelSerializerTests(TestCase):
         self.assertEqual(data['author']['name'], 'Test Author')
 
     def test_inline_serializer_with_field_attributes(self):
-        """Test that InlineDynamicModelSerializer works with field_attributes parameter."""
+        """Test that InlineShapelessModelSerializer works with field_attributes parameter."""
         # Create an inline serializer with field attributes
-        serializer = InlineDynamicModelSerializer(
+        serializer = InlineShapelessModelSerializer(
             self.author1,
             model=Author,
             field_attributes={
@@ -117,9 +117,9 @@ class InlineDynamicModelSerializerTests(TestCase):
         self.assertFalse(serializer.fields['bio'].required)
 
     def test_inline_serializer_with_rename_fields(self):
-        """Test that InlineDynamicModelSerializer works with rename_fields parameter."""
+        """Test that InlineShapelessModelSerializer works with rename_fields parameter."""
         # Create an inline serializer with renamed fields
-        serializer = InlineDynamicModelSerializer(
+        serializer = InlineShapelessModelSerializer(
             self.author1,
             model=Author,
             rename_fields={'name': 'author_name', 'bio': 'biography'}
@@ -135,9 +135,9 @@ class InlineDynamicModelSerializerTests(TestCase):
         self.assertEqual(data['biography'], 'Author biography')
 
     def test_inline_serializer_with_conditional_fields(self):
-        """Test that InlineDynamicModelSerializer works with conditional_fields parameter."""
+        """Test that InlineShapelessModelSerializer works with conditional_fields parameter."""
         # Create an inline serializer with conditional fields
-        serializer = InlineDynamicModelSerializer(
+        serializer = InlineShapelessModelSerializer(
             self.author1,
             model=Author,
             conditional_fields={
@@ -151,9 +151,9 @@ class InlineDynamicModelSerializerTests(TestCase):
         self.assertNotIn('bio', data)
 
     def test_inline_serializer_without_model(self):
-        """Test that InlineDynamicModelSerializer works without model parameter."""
+        """Test that InlineShapelessModelSerializer works without model parameter."""
         # Create a subclass with Meta class
-        class AuthorInlineSerializer(InlineDynamicModelSerializer):
+        class AuthorInlineSerializer(InlineShapelessModelSerializer):
             class Meta:
                 model = Author
                 fields = ['name']
@@ -168,13 +168,13 @@ class InlineDynamicModelSerializerTests(TestCase):
         self.assertEqual(data['name'], 'Test Author')
 
     def test_inline_serializer_many_true(self):
-        """Test that InlineDynamicModelSerializer works with many=True."""
+        """Test that InlineShapelessModelSerializer works with many=True."""
         # Create multiple authors
         author2 = Author.objects.create(name="Second Author", bio="Another biography")
         authors = [self.author1, author2]
         
         # Create an inline serializer with many=True
-        serializer = InlineDynamicModelSerializer(
+        serializer = InlineShapelessModelSerializer(
             authors,
             model=Author,
             many=True,
@@ -190,31 +190,31 @@ class InlineDynamicModelSerializerTests(TestCase):
     def test_inline_serializer_complex_case(self):
         """Test a complex case with multiple features combined."""
         # Create an inline serializer with multiple features
-        serializer = InlineDynamicModelSerializer(
+        serializer = InlineShapelessModelSerializer(
             self.post,
             model=BlogPost,
             fields=['title', 'content', 'author', 'tags', 'categories'],
             nested={
                 'author': {
-                    'serializer': InlineDynamicModelSerializer,
+                    'serializer': InlineShapelessModelSerializer,
                     'model': AuthorProfile,
                     'fields': ['bio', 'user'],
                     'nested': {
                         'user': {
-                            'serializer': InlineDynamicModelSerializer,
+                            'serializer': InlineShapelessModelSerializer,
                             'model': User,
                             'fields': ['username', 'email']
                         }
                     }
                 },
                 'tags': {
-                    'serializer': InlineDynamicModelSerializer,
+                    'serializer': InlineShapelessModelSerializer,
                     'model': Tag,
                     'fields': ['name'],
                     'many': True
                 },
                 'categories': {
-                    'serializer': InlineDynamicModelSerializer,
+                    'serializer': InlineShapelessModelSerializer,
                     'model': Category,
                     'fields': ['name'],
                     'many': True

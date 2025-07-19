@@ -347,8 +347,8 @@ class DynamicNestedSerializerMixin(DynamicSerializerBaseMixin):
 
         return serializer_class(**serializer_kwargs)
 
-class InlineDynamicSerializerMixin:
-    """Inline dynamic serializer mixin that dynamically sets Meta.model and Meta.fields."""
+class InlineShapelessSerializerMixin:
+    """Inline shapeless serializer mixin that dynamically sets Meta.model and Meta.fields."""
 
     def __init__(self, *args, **kwargs):
         model = kwargs.pop("model", None)

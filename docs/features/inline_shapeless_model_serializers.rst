@@ -1,23 +1,23 @@
-Inline Dynamic Serializers
+Inline Shapeless Model Serializers
 ========================
 
-The ``InlineDynamicModelSerializer`` allows you to create serializers on-the-fly without defining a serializer class. This is particularly useful for one-off serialization needs or when you need to dynamically create serializers based on runtime conditions.
+The ``InlineShapelessModelSerializer`` allows you to create serializers on-the-fly without defining a serializer class. This is particularly useful for one-off serialization needs or when you need to dynamically create serializers based on runtime conditions.
 
 Basic Usage
 ----------
 
-To use the ``InlineDynamicModelSerializer``, you need to provide a model parameter:
+To use the ``InlineShapelessModelSerializer``, you need to provide a model parameter:
 
 .. code-block:: python
 
-    from shapeless_serializers.serializers import InlineDynamicModelSerializer
+    from shapeless_serializers.serializers import InlineShapelessModelSerializer
     from myapp.models import Author
 
     # Get an author instance
     author = Author.objects.get(pk=1)
 
     # Create an inline serializer with a model
-    serializer = InlineDynamicModelSerializer(author, model=Author)
+    serializer = InlineShapelessModelSerializer(author, model=Author)
     serializer.data  # Contains all fields from the Author model
 
 
@@ -28,7 +28,7 @@ You can limit the fields included in the serialized output:
 
 .. code-block:: python
 
-    serializer = InlineDynamicModelSerializer(
+    serializer = InlineShapelessModelSerializer(
         author, 
         model=Author, 
         fields=['name', 'bio']
@@ -47,13 +47,13 @@ You can include related models in the serialized output:
 
     book = Book.objects.get(pk=1)
 
-    serializer = InlineDynamicModelSerializer(
+    serializer = InlineShapelessModelSerializer(
         book,
         model=Book,
         fields=['title', 'author', 'price'],
         nested={
             'author': {
-                'serializer': InlineDynamicModelSerializer,
+                'serializer': InlineShapelessModelSerializer,
                 'model': Author,
                 'fields': ['name', 'bio']
             }
@@ -69,7 +69,7 @@ You can rename fields in the serialized output:
 
 .. code-block:: python
 
-    serializer = InlineDynamicModelSerializer(
+    serializer = InlineShapelessModelSerializer(
         author,
         model=Author,
         rename_fields={'name': 'author_name', 'bio': 'biography'}
@@ -87,7 +87,7 @@ You can conditionally include or exclude fields based on conditions:
     # Only include bio if show_bio is True
     show_bio = request.query_params.get('show_bio', '').lower() == 'true'
 
-    serializer = InlineDynamicModelSerializer(
+    serializer = InlineShapelessModelSerializer(
         author,
         model=Author,
         conditional_fields={
@@ -104,7 +104,7 @@ You can modify field attributes dynamically:
 
 .. code-block:: python
 
-    serializer = InlineDynamicModelSerializer(
+    serializer = InlineShapelessModelSerializer(
         book,
         model=Book,
         field_attributes={
@@ -123,7 +123,7 @@ You can serialize multiple instances by setting ``many=True``:
 
     authors = Author.objects.all()
 
-    serializer = InlineDynamicModelSerializer(
+    serializer = InlineShapelessModelSerializer(
         authors,
         model=Author,
         many=True,
@@ -143,31 +143,31 @@ You can combine multiple features for complex serialization needs:
 
     post = BlogPost.objects.get(pk=1)
 
-    serializer = InlineDynamicModelSerializer(
+    serializer = InlineShapelessModelSerializer(
         post,
         model=BlogPost,
         fields=['title', 'content', 'author', 'tags', 'categories'],
         nested={
             'author': {
-                'serializer': InlineDynamicModelSerializer,
+                'serializer': InlineShapelessModelSerializer,
                 'model': AuthorProfile,
                 'fields': ['bio', 'user'],
                 'nested': {
                     'user': {
-                        'serializer': InlineDynamicModelSerializer,
+                        'serializer': InlineShapelessModelSerializer,
                         'model': User,
                         'fields': ['username', 'email']
                     }
                 }
             },
             'tags': {
-                'serializer': InlineDynamicModelSerializer,
+                'serializer': InlineShapelessModelSerializer,
                 'model': Tag,
                 'fields': ['name'],
                 'many': True
             },
             'categories': {
-                'serializer': InlineDynamicModelSerializer,
+                'serializer': InlineShapelessModelSerializer,
                 'model': Category,
                 'fields': ['name'],
                 'many': True
