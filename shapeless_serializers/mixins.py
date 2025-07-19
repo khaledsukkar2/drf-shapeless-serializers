@@ -346,3 +346,16 @@ class DynamicNestedSerializerMixin(DynamicSerializerBaseMixin):
         serializer_kwargs.update(params_copy)
 
         return serializer_class(**serializer_kwargs)
+
+class InlineDynamicSerializerMixin:
+    """Inline dynamic serializer mixin that dynamically sets Meta.model and Meta.fields."""
+
+    def __init__(self, *args, **kwargs):
+        model = kwargs.pop("model", None)
+        if model:
+            meta = getattr(self, 'Meta', type('Meta', (), {}))
+            meta.model = model
+            meta.fields = '__all__'
+            self.Meta = meta
+        super().__init__(*args, **kwargs)
+
