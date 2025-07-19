@@ -34,7 +34,6 @@ class ShapelessModelSerializer(
 class InlineShapelessModelSerializer(
     InlineShapelessSerializerMixin,
     ShapelessModelSerializer,
-    serializers.ModelSerializer,
 ):
     pass
 
