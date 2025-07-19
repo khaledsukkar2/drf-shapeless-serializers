@@ -1,10 +1,10 @@
 Inline Shapeless Model Serializers
-========================
+==================================
 
 The ``InlineShapelessModelSerializer`` allows you to create serializers on-the-fly without defining a serializer class. This is particularly useful for one-off serialization needs or when you need to dynamically create serializers based on runtime conditions.
 
 Basic Usage
-----------
+-----------
 
 To use the ``InlineShapelessModelSerializer``, you need to provide a model parameter:
 
@@ -22,7 +22,7 @@ To use the ``InlineShapelessModelSerializer``, you need to provide a model param
 
 
 Limiting Fields
---------------
+---------------
 
 You can limit the fields included in the serialized output:
 
@@ -37,7 +37,7 @@ You can limit the fields included in the serialized output:
 
 
 Nested Relationships
-------------------
+--------------------
 
 You can include related models in the serialized output:
 
@@ -63,7 +63,7 @@ You can include related models in the serialized output:
 
 
 Field Renaming
-------------
+--------------
 
 You can rename fields in the serialized output:
 
@@ -78,7 +78,7 @@ You can rename fields in the serialized output:
 
 
 Conditional Fields
----------------
+------------------
 
 You can conditionally include or exclude fields based on conditions:
 
@@ -98,7 +98,7 @@ You can conditionally include or exclude fields based on conditions:
 
 
 Field Attributes
---------------
+----------------
 
 You can modify field attributes dynamically:
 
@@ -115,7 +115,7 @@ You can modify field attributes dynamically:
 
 
 Multiple Instances
----------------
+------------------
 
 You can serialize multiple instances by setting ``many=True``:
 
@@ -133,7 +133,7 @@ You can serialize multiple instances by setting ``many=True``:
 
 
 Complex Example
--------------
+---------------
 
 You can combine multiple features for complex serialization needs:
 
