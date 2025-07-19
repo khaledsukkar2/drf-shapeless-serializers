@@ -269,6 +269,28 @@ AuthorSerializer(
 )
 ```
 
+#### 6. Inline Shapeless Model Serializers
+Create serializers on-the-fly without defining a serializer class, perfect for one-off serialization needs:
+
+```python
+from shapeless_serializers.serializers import InlineShapelessModelSerializer
+from myapp.models import Book, Author
+
+book = Book.objects.get(pk=1)
+
+serializer = InlineShapelessModelSerializer(
+    book,
+    model=Book,
+    fields=['title', 'author', 'price'],
+    nested={
+        'author': {
+            'serializer': InlineShapelessModelSerializer,
+            'model': Author,
+            'fields': ['name', 'bio']
+        }
+    }
+)
+```
 
 ## WHEN TO USE
 
