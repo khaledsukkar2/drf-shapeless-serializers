@@ -3,11 +3,14 @@
 [![Published on Django Packages](https://img.shields.io/badge/Published%20on-Django%20Packages-0c3c26)](https://djangopackages.org/packages/p/drf-shapeless-serializers/)
 
 ## Motivation
+Traditional Django REST Framework serializers often lead to what’s known as “serializer hell” - a situation where developers:
 
-Tired of serializer hell? Every Django REST Framework developer knows the pain of creating countless serializer variations for slightly different API endpoints, duplicating code for simple field variations, struggling with rigid and complex nested relationships, and maintaining sprawling serializer classes.
+- Create numerous serializer variations for slightly different API endpoints
+- Duplicate code for simple field variations
+- Struggle with rigid and complex nested relationships
+- Maintain sprawling serializer classes that become hard to manage
 
-What if you could eliminate 80% of your serializer code? `drf-shapeless-serializers` revolutionizes API development by giving you runtime serializer superpowers. Instead of creating multiple serializer classes , configure everything on the fly with one serializer to rule them all.
-Now you can shape your serializers like Lego bricks - rearranging fields, nesting relationships, and transforming outputs dynamically with unlimited flexibility.
+`drf-shapeless-serializers` was created to solve these pain points by introducing dynamic runtime configuration capabilities, allowing you to eliminate up to 80% of your serializer code while gaining unprecedented flexibility.
 
 ## Documentation
 https://drf-shapeless-serializers.readthedocs.io/en/latest/
@@ -273,9 +276,6 @@ AuthorSerializer(
 Create serializers on-the-fly without defining a serializer class, perfect for one-off serialization needs:
 
 ```python
-from shapeless_serializers.serializers import InlineShapelessModelSerializer
-from myapp.models import Book, Author
-
 book = Book.objects.get(pk=1)
 
 serializer = InlineShapelessModelSerializer(
