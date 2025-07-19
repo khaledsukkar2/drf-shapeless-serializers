@@ -1,11 +1,13 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Book
+from .models import Book, Author
 
 from .serializers import (
     DynamicBookSerializer,
     DynamicAuthorSerializer,
     UserSerializer)
+
+from shapeless_serializers.serializers import InlineShapelessModelSerializer
 
 from rest_framework.validators import (
     UniqueValidator,
@@ -56,3 +58,37 @@ def create_book(request):
         serializer.save()
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
+
+
+# Examples of InlineShapelessModelSerializer usage
+
+@api_view(['GET'])
+def author_detail_inline(request, pk):
+    """
+    Example of using InlineShapelessModelSerializer with basic model parameter.
+    This demonstrates how to create a serializer on-the-fly without defining a serializer class.
+    """
+    author = Author.objects.get(pk=pk)
+    
+    # Create an inline serializer with a model
+    serializer = InlineShapelessModelSerializer(author, model=Author)
+    
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def book_detail_inline(request, pk):
+    """
+    Example of using InlineShapelessModelSerializer with fields parameter.
+    This demonstrates how to limit the fields in the serialized output.
+    """
+    book = Book.objects.get(pk=pk)
+    
+    # Create an inline serializer with a model and fields
+    serializer = InlineShapelessModelSerializer(
+        book, 
+        model=Book, 
+        fields=['title', 'price']
+    )
+    
+    return Response(serializer.data)
