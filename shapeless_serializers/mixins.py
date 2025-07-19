@@ -1,5 +1,4 @@
-import sys
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple, Union
+from typing import Any, Dict
 
 from django.db import models
 
@@ -7,9 +6,6 @@ from shapeless_serializers.exceptions import (
     DynamicSerializerConfigError,
     ExcessiveNestingError,
 )
-
-##TODO write readme and how to contribute files
-##TODO build the package and share it
 
 
 class DynamicSerializerBaseMixin:

@@ -20,9 +20,13 @@ Configure nested relationships using the ``nested`` parameter:
         }
     )
 
-Nested Configuration Options
-----------------------------
+Common Nested Configuration Options
+-----------------------------------
 
+.. important::
+    all standard DRF serializer keyword arguments (context, partial, etc.) are fully supported in addition to the package-specific configuration options.
+    and our keyword arguments(fields, rename_fields, etc.) if you are using the shapeless serializer mixins or inheriting from shapeless serializers,
+    
 +-------------------+--------------------------------------------------+
 | Option            | Description                                      |                       
 +===================+==================================================+
