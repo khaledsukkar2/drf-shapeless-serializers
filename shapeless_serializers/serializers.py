@@ -6,7 +6,7 @@ from shapeless_serializers.mixins import (
     DynamicFieldRenamingMixin,
     DynamicFieldsMixin,
     DynamicNestedSerializerMixin,
-    InlineDynamicSerializerMixin,
+    InlineShapelessSerializerMixin,
 )
 
 
@@ -31,8 +31,8 @@ class ShapelessModelSerializer(
 ):
     pass
 
-class InlineDynamicModelSerializer(
-    InlineDynamicSerializerMixin,
+class InlineShapelessModelSerializer(
+    InlineShapelessSerializerMixin,
     ShapelessModelSerializer,
     serializers.ModelSerializer,
 ):
