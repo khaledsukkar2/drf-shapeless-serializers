@@ -63,6 +63,26 @@ class ComprehensiveNestedSerializerTests(TestCase):
         data = serializer.data
         self.assertEqual(data["author"]["bio"], "Author bio")
         self.assertEqual(list(data.keys()), ["id", "title", "author"])
+        
+    def test_nested_keys_and_not_in_fields(self):
+        serializer = DynamicBlogPostSerializer(
+            self.post,
+            fields=["id", "title"],
+            nested={
+                "author": {
+                    "serializer": DynamicAuthorProfileSerializer,
+                    "fields": ["bio"],
+                },
+                "tags": {
+                    "serializer": TagSerializer,
+                    "fields": ["id", "name"]
+                }
+            },
+        )
+
+        data = serializer.data
+        self.assertNotIn("author", list(data.keys()))
+        self.assertNotIn("tags", list(data.keys()))
 
     def test_five_level_nested_serialization(self):
         serializer = DynamicBlogPostSerializer(
@@ -78,15 +98,16 @@ class ComprehensiveNestedSerializerTests(TestCase):
                             "fields": [
                                 "id",
                                 "email",
+                                "author_profile",
                             ], 
                             "nested": {
                                 "author_profile": {
                                     "serializer": DynamicAuthorProfileSerializer,
-                                    "fields": ["bio"],
+                                    "fields": ["bio", "blog_posts"],
                                     "nested": {
                                         "blog_posts": {
                                             "serializer": DynamicBlogPostSerializer,
-                                            "fields": ["title"],
+                                            "fields": ["title", "tags"],
                                             "nested": {
                                                 "tags": {
                                                     "serializer": TagSerializer,

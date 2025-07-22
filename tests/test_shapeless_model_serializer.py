@@ -568,7 +568,7 @@ class TestShaplessModelSerializer(TestCase):
             nested={
                 "author": {
                     "serializer": DynamicAuthorProfileSerializer,
-                    "fields": ["bio", "is_verified"],
+                    "fields": ["bio", "is_verified", "user"],
                     "rename_fields": {"bio": "author_biography"},
                     "field_attributes": {
                         "is_verified": {"help_text": "Verified status"}
