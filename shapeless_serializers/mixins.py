@@ -185,6 +185,7 @@ class DynamicNestedSerializerMixin(DynamicSerializerBaseMixin):
     def to_representation(self, instance):
         """Apply proper field filtering based on write_only."""
         representation = super().to_representation(instance)
+        
         if not self._nested:
             return representation
 
@@ -192,8 +193,9 @@ class DynamicNestedSerializerMixin(DynamicSerializerBaseMixin):
             raise DynamicSerializerConfigError("'nested' must be a dictionary")
 
         for field_name, nested_params in self._nested.items():
-            if isinstance(nested_params, dict) and nested_params.get(
-                "write_only", False
+            if (
+                isinstance(nested_params, dict)
+                and nested_params.get("write_only", False)
             ):
                 representation.pop(field_name, None)
 
@@ -205,6 +207,9 @@ class DynamicNestedSerializerMixin(DynamicSerializerBaseMixin):
         representation: Dict[str, Any],
     ) -> Dict[str, Any]:
         """Process nested serializer configuration ."""
+        fields = getattr(self, "_fields", None)
+        fields = set(fields) if fields else None
+        
         if not self._nested:
             return representation
 
@@ -214,7 +219,10 @@ class DynamicNestedSerializerMixin(DynamicSerializerBaseMixin):
         for field_name, original_nested_params in self._nested.items():
             if original_nested_params.get("write_only", False):
                 continue
-
+            
+            if fields is not None and field_name not in fields:
+                continue
+            
             if not isinstance(original_nested_params, dict):
                 raise DynamicSerializerConfigError(
                     f"Nested params for '{field_name}' must be a dictionary"
@@ -343,15 +351,15 @@ class DynamicNestedSerializerMixin(DynamicSerializerBaseMixin):
 
         return serializer_class(**serializer_kwargs)
 
+
 class InlineShapelessSerializerMixin:
     """Inline shapeless serializer mixin that dynamically sets Meta.model and Meta.fields."""
 
     def __init__(self, *args, **kwargs):
         model = kwargs.pop("model", None)
         if model:
-            meta = getattr(self, 'Meta', type('Meta', (), {}))
+            meta = getattr(self, "Meta", type("Meta", (), {}))
             meta.model = model
-            meta.fields = '__all__'
+            meta.fields = "__all__"
             self.Meta = meta
         super().__init__(*args, **kwargs)
-
