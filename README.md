@@ -1,6 +1,7 @@
 
 # drf-shapeless-serializers 
 [![Published on Django Packages](https://img.shields.io/badge/Published%20on-Django%20Packages-0c3c26)](https://djangopackages.org/packages/p/drf-shapeless-serializers/)
+[![PyPI Downloads](https://static.pepy.tech/badge/drf-shapeless-serializers)](https://pepy.tech/projects/drf-shapeless-serializers)
 
 ## Motivation
 Traditional Django REST Framework serializers often lead to what’s known as “serializer hell” - a situation where developers:
