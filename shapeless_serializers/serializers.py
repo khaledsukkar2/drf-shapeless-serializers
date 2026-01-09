@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from shapeless_serializers.mixins import (
+from shapeless_serializers.mixins.serializers import (
     DynamicConditionalFieldsMixin,
     DynamicFieldAttributesMixin,
     DynamicFieldRenamingMixin,
@@ -31,11 +31,13 @@ class ShapelessModelSerializer(
 ):
     pass
 
+
 class InlineShapelessModelSerializer(
     InlineShapelessSerializerMixin,
     ShapelessModelSerializer,
 ):
     pass
+
 
 class ShapelessHyperlinkedModelSerializer(
     DynamicFieldsMixin,
