@@ -1,7 +1,8 @@
 import datetime
-from django.utils import timezone
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.test import APIRequestFactory
 
@@ -82,7 +83,9 @@ class TestShaplessModelSerializer(TestCase):
             author=self.author_profile1,
             content="Content about Python and Django.",
             status="published",
-            publish_date=timezone.datetime(2023, 1, 1, tzinfo=timezone.get_current_timezone()),
+            publish_date=timezone.datetime(
+                2023, 1, 1, tzinfo=timezone.get_current_timezone()
+            ),
             view_count=100,
         )
         self.post1.categories.add(self.category1)
@@ -93,7 +96,9 @@ class TestShaplessModelSerializer(TestCase):
             author=self.author_profile2,
             content="Content about AI in science.",
             status="published",
-            publish_date=timezone.datetime(2023, 1, 15, tzinfo=timezone.get_current_timezone()),
+            publish_date=timezone.datetime(
+                2023, 1, 15, tzinfo=timezone.get_current_timezone()
+            ),
             view_count=50,
         )
         self.post2.categories.add(self.category2)
@@ -104,7 +109,9 @@ class TestShaplessModelSerializer(TestCase):
             author=self.author_profile1,
             content="A short fiction piece.",
             status="draft",
-            publish_date=timezone.datetime(2023, 2, 1, tzinfo=timezone.get_current_timezone()),
+            publish_date=timezone.datetime(
+                2023, 2, 1, tzinfo=timezone.get_current_timezone()
+            ),
             view_count=10,
         )
         self.post3.categories.add(self.category3)
@@ -475,53 +482,42 @@ class TestShaplessModelSerializer(TestCase):
 
     def test_deep_nested_comments_and_replies_with_filters_and_user_nesting(self):
         """
-        Tests deep nesting of comments/replies including user nesting at each level,
-        applying filters at multiple levels.
-        Structure: BlogPost -> Comments (approved) -> Replies (approved) -> Replies (approved)
-        Also, User nested at each Comment/Reply level.
+        Tests deep nesting using the new Serializer Instance pattern.
         """
         serializer = DynamicBlogPostSerializer(
             self.post1,
             fields=["id", "title", "comments"],
             nested={
-                "comments": {
-                    "serializer": DynamicCommentSerializer,
-                    "fields": ["id", "content", "user", "replies", "is_approved"],
-                    "instance": (self.post1.comments.filter(is_approved=True)),
-                    "many": True,
-                    "nested": {
-                        "user": {
-                            "serializer": UserSerializer,
-                            "fields": ["id", "username"],
-                        },
-                        "replies": {
-                            "serializer": DynamicCommentSerializer,
-                            "fields": ["id", "content", "user", "replies"],
-                            "instance": lambda instance, ctx: instance.replies.filter(
+                "comments": DynamicCommentSerializer(
+                    fields=["id", "content", "user", "replies", "is_approved"],
+                    # Pass instance directly (evaluated lazily if it's a lambda, or eagerly if a queryset)
+                    instance=self.post1.comments.filter(is_approved=True),
+                    many=True,
+                    nested={
+                        "user": UserSerializer(fields=["id", "username"]),
+                        "replies": DynamicCommentSerializer(
+                            fields=["id", "content", "user", "replies"],
+                            # Use lambda for dynamic instance access
+                            instance=lambda instance, ctx: instance.replies.filter(
                                 is_approved=True
                             ),
-                            "nested": {
-                                "user": {
-                                    "serializer": UserSerializer,
-                                    "fields": ["id", "username"],
-                                },
-                                "replies": {
-                                    "serializer": DynamicCommentSerializer,
-                                    "fields": ["id", "content", "user"],
-                                    "instance": lambda instance, ctx: instance.replies.filter(
+                            nested={
+                                "user": UserSerializer(fields=["id", "username"]),
+                                "replies": DynamicCommentSerializer(
+                                    fields=["id", "content", "user"],
+                                    instance=lambda instance, ctx: instance.replies.filter(
                                         is_approved=True
                                     ),
-                                    "nested": {
-                                        "user": {
-                                            "serializer": UserSerializer,
-                                            "fields": ["id", "username"],
-                                        }
+                                    nested={
+                                        "user": UserSerializer(
+                                            fields=["id", "username"]
+                                        )
                                     },
-                                },
+                                ),
                             },
-                        },
+                        ),
                     },
-                }
+                )
             },
         )
 
@@ -558,61 +554,53 @@ class TestShaplessModelSerializer(TestCase):
 
     def test_mixing_field_and_attribute_configs_in_deep_nesting(self):
         """
-        Tests applying field, attribute, and renaming configs at different
-        levels of deep nesting.
+        Tests applying field, attribute, and renaming configs using
+        the new Serializer Instance pattern.
         """
         serializer = DynamicBlogPostSerializer(
             self.post1,
             fields=["id", "title", "author", "comments"],
             rename_fields={"id": "post_identifier"},
             nested={
-                "author": {
-                    "serializer": DynamicAuthorProfileSerializer,
-                    "fields": ["bio", "is_verified", "user"],
-                    "rename_fields": {"bio": "author_biography"},
-                    "field_attributes": {
-                        "is_verified": {"help_text": "Verified status"}
+                "author": DynamicAuthorProfileSerializer(
+                    fields=["bio", "is_verified", "user"],
+                    rename_fields={"bio": "author_biography"},
+                    field_attributes={"is_verified": {"help_text": "Verified status"}},
+                    nested={
+                        "user": UserSerializer(
+                            fields=["id", "username"],
+                            rename_fields={"username": "user_login"},
+                        )
                     },
-                    "nested": {
-                        "user": {
-                            "serializer": UserSerializer,
-                            "fields": ["id", "username"],
-                            "rename_fields": {"username": "user_login"},
-                        }
-                    },
-                },
-                "comments": {
-                    "serializer": DynamicCommentSerializer,
-                    "fields": ["id", "content", "user", "replies"],
-                    "instance": self.post1.comments.filter(
+                ),
+                "comments": DynamicCommentSerializer(
+                    fields=["id", "content", "user", "replies"],
+                    instance=self.post1.comments.filter(
                         is_approved=True, parent__isnull=True
                     ),
-                    "rename_fields": {"content": "comment_text"},
-                    "field_attributes": {"id": {"label": "Comment ID"}},
-                    "nested": {
-                        "user": {
-                            "serializer": UserSerializer,
-                            "fields": ["id", "username"],
-                            "rename_fields": {"username": "commenter_name"},
-                        },
-                        "replies": {
-                            "serializer": DynamicCommentSerializer,
-                            "fields": ["id", "content", "user"],
-                            "instance": lambda instance, ctx: instance.replies.filter(
+                    rename_fields={"content": "comment_text"},
+                    field_attributes={"id": {"label": "Comment ID"}},
+                    nested={
+                        "user": UserSerializer(
+                            fields=["id", "username"],
+                            rename_fields={"username": "commenter_name"},
+                        ),
+                        "replies": DynamicCommentSerializer(
+                            fields=["id", "content", "user"],
+                            instance=lambda instance, ctx: instance.replies.filter(
                                 is_approved=True
                             ),
-                            "rename_fields": {"content": "reply_text"},
-                            "field_attributes": {"id": {"label": "Reply ID"}},
-                            "nested": {
-                                "user": {
-                                    "serializer": UserSerializer,
-                                    "fields": ["id", "username"],
-                                    "rename_fields": {"username": "replier_name"},
-                                }
+                            rename_fields={"content": "reply_text"},
+                            field_attributes={"id": {"label": "Reply ID"}},
+                            nested={
+                                "user": UserSerializer(
+                                    fields=["id", "username"],
+                                    rename_fields={"username": "replier_name"},
+                                )
                             },
-                        },
+                        ),
                     },
-                },
+                ),
             },
         )
         data = serializer.data
@@ -667,5 +655,3 @@ class TestShaplessModelSerializer(TestCase):
         self.assertIn("replier_name", reply_user_data)
         self.assertNotIn("username", reply_user_data)
         self.assertEqual(reply_user_data["replier_name"], "user2")
-
-        
