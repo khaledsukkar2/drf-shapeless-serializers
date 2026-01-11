@@ -4,7 +4,7 @@ from rest_framework import serializers
 from test_app.models import AuthorProfile, BlogPost, Category, User
 from test_app.serializers import CategorySerializer
 from shapeless_serializers.exceptions import DynamicSerializerConfigError
-from shapeless_serializers.mixins import DynamicFieldsMixin
+from shapeless_serializers.mixins.serializers import DynamicFieldsMixin
 
 
 class AuthorProfileSerializer(DynamicFieldsMixin, serializers.ModelSerializer):

@@ -3,7 +3,7 @@ from django.test import TestCase
 from rest_framework import serializers
 from rest_framework.test import APIRequestFactory
 
-from shapeless_serializers.mixins import (
+from shapeless_serializers.mixins.serializers import (
     DynamicFieldRenamingMixin,
     DynamicSerializerConfigError,
 )

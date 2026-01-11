@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework.test import APIRequestFactory
 
 from test_app.models import AuthorProfile, BlogPost, Category, Comment
-from shapeless_serializers.mixins import (
+from shapeless_serializers.mixins.serializers import (
     DynamicConditionalFieldsMixin,
     DynamicSerializerConfigError,
 )
