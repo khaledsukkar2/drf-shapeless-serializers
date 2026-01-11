@@ -6,7 +6,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.test import APIRequestFactory
 
-from shapeless_serializers.mixins import DynamicSerializerConfigError
+from shapeless_serializers.exceptions import DynamicSerializerConfigError
 from shapeless_serializers.serializers import ShapelessModelSerializer
 from test_app.models import AuthorProfile, BlogPost, Category, Comment, PostLike, Tag
 from test_app.serializers import (
