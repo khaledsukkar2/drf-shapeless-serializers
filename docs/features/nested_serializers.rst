@@ -13,10 +13,7 @@ Configure nested relationships using the ``nested`` parameter:
     serializer = BlogPostSerializer(
         instance=post,
         nested={
-            'author': {
-                'serializer': AuthorSerializer,
-                'fields': ['name', 'bio']
-            }
+            'author': AuthorSerializer(fields=['name', 'bio'])
         }
     )
 
@@ -104,51 +101,45 @@ Example With Complex Relationships
         fields=["id", "title", "author", "comments"],
         rename_fields={"id": "post_identifier"},
         nested={
-            "author": {
-                "serializer": DynamicAuthorProfileSerializer,
-                "fields": ["bio", "is_verified", 'user'],
-                "rename_fields": {"bio": "author_biography"},
-                "field_attributes": {
+            "author": DynamicAuthorProfileSerializer(
+                fields=["bio", "is_verified", 'user'],
+                rename_fields={"bio": "author_biography"},
+                field_attributes={
                     "is_verified": {"help_text": "Verified status"}
                 },
-                "nested": {
-                    "user": {
-                        "serializer": UserSerializer,
-                        "fields": ["id", "username"],
-                        "rename_fields": {"username": "user_login"},
-                    }
+                nested={
+                    "user": UserSerializer(
+                        fields=["id", "username"],
+                        rename_fields={"username": "user_login"},
+                    )
                 },
-            },
-            "comments": {
-                "serializer": DynamicCommentSerializer,
-                "fields": ["id", "content", "user", "replies"],
-                "instance": posts.comments.filter(
+            ),
+            "comments": DynamicCommentSerializer(
+                fields=["id", "content", "user", "replies"],
+                instance=posts.comments.filter(
                     is_approved=True, parent__isnull=True
                 ),
-                "rename_fields": {"content": "comment_text"},
-                "field_attributes": {"id": {"label": "Comment ID"}},
-                "nested": {
-                    "user": {
-                        "serializer": UserSerializer,
-                        "fields": ["id", "username"],
-                        "rename_fields": {"username": "commenter_name"},
-                    },
-                    "replies": {
-                        "serializer": DynamicCommentSerializer,
-                        "fields": ["id", "content", "user"],
-                        "instance": lambda instance, ctx: instance.replies.filter(is_approved=True),
-                        "rename_fields": {"content": "reply_text"},
-                        "field_attributes": {"id": {"label": "Reply ID"}},
-                        "nested": {
-                            "user": {
-                                "serializer": UserSerializer,
-                                "fields": ["id", "username"],
-                                "rename_fields": {"username": "replier_name"},
-                            }
+                rename_fields={"content": "comment_text"},
+                field_attributes={"id": {"label": "Comment ID"}},
+                nested={
+                    "user": UserSerializer(
+                        fields=["id", "username"],
+                        rename_fields={"username": "commenter_name"},
+                    ),
+                    "replies": DynamicCommentSerializer(
+                        fields=["id", "content", "user"],
+                        instance=lambda instance, ctx: instance.replies.filter(is_approved=True),
+                        rename_fields={"content": "reply_text"},
+                        field_attributes={"id": {"label": "Reply ID"}},
+                        nested={
+                            "user": UserSerializer(
+                                fields=["id", "username"],
+                                rename_fields={"username": "replier_name"},
+                            )
                         },
-                    },
+                    ),
                 },
-            },
+            ),
         }
     )
 
@@ -161,35 +152,30 @@ Example with Very Deep Relationships
         posts,
         fields=["id", "title", "author", "tags", "comments", "likes"],
         nested={
-            "author": {
-                "serializer": DynamicAuthorProfileSerializer,
-                "fields": ["id", "bio", "user"],
-                "nested": {
-                    "user": {
-                        "serializer": UserSerializer,
-                        "fields": ["id", "email"],
-                        "nested": {
-                            "author_profile": {
-                                "serializer": DynamicAuthorProfileSerializer,
-                                "fields": ["bio"],
-                                "nested": {
-                                    "blog_posts": {
-                                        "serializer": DynamicBlogPostSerializer,
-                                        "fields": ["title"],
-                                        "nested": {
-                                            "tags": {
-                                                "serializer": TagSerializer,
-                                                "fields": ["name"],
-                                                "many": True,
-                                            }
+            "author": DynamicAuthorProfileSerializer(
+                fields=["id", "bio", "user"],
+                nested={
+                    "user": UserSerializer(
+                        fields=["id", "email"],
+                        nested={
+                            "author_profile": DynamicAuthorProfileSerializer(
+                                fields=["bio"],
+                                nested={
+                                    "blog_posts": DynamicBlogPostSerializer(
+                                        fields=["title"],
+                                        nested={
+                                            "tags": TagSerializer(
+                                                fields=["name"],
+                                                many=True,
+                                            )
                                         },
-                                    }
+                                    )
                                 },
-                            }
+                            )
                         },
-                    }
+                    )
                 },
-            }
+            )
         }
     )
 
