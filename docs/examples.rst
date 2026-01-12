@@ -38,16 +38,12 @@ Example 2: Complex nested structure
    serializer = SurveySerializer(
        data=data,
        nested={
-           'demographics': {
-               'serializer': ShapelessSerializer,
-               'fields': ['age', 'gender'],
-               'nested': {
-                   'stats': {
-                       'serializer': ShapelessSerializer,
-                       'fields': ['score']
-                   }
+           'demographics': ShapelessSerializer(
+               fields=['age', 'gender'],
+               nested={
+                   'stats': ShapelessSerializer(fields=['score'])
                }
-           }
+           )
        }
    )
 
@@ -86,16 +82,14 @@ Example 2: Advanced nested relationships
        product,
        fields=['id', 'name', 'supplier', 'categories'],
        nested={
-           'supplier': {
-               'serializer': SupplierSerializer,
-               'fields': ['name', 'contact'],
-               'rename_fields': {'contact': 'primary_contact'}
-           },
-           'categories': {
-               'serializer': CategorySerializer,
-               'fields': ['name'],
-               'many': True
-           }
+           'supplier': SupplierSerializer(
+               fields=['name', 'contact'],
+               rename_fields={'contact': 'primary_contact'}
+           ),
+           'categories': CategorySerializer(
+               fields=['name'],
+               many=True
+           )
        },
        conditional_fields={
            'internal_code': lambda i,c: c['request'].user.is_staff
@@ -138,18 +132,16 @@ Example 2: Complex hyperlinked relationships
        book,
        context={'request': request},
        nested={
-           'author': {
-               'serializer': AuthorHyperlinkedSerializer,
-               'fields': ['url', 'name'],
-               'rename_fields': {'url': 'author_link'}
-           },
-           'publisher': {
-               'serializer': PublisherHyperlinkedSerializer,
-               'fields': ['url', 'name'],
-               'field_attributes': {
+           'author': AuthorHyperlinkedSerializer(
+               fields=['url', 'name'],
+               rename_fields={'url': 'author_link'}
+           ),
+           'publisher': PublisherHyperlinkedSerializer(
+               fields=['url', 'name'],
+               field_attributes={
                    'url': {'lookup_field': 'uuid'}
                }
-           }
+           )
        }
    )
 
@@ -175,10 +167,7 @@ API Versioning Pattern
                **base_config,
                'fields': ['id', 'title', 'content', 'author'],
                'nested': {
-                   'author': {
-                       'serializer': AuthorSerializer,
-                       'fields': ['name']
-                   }
+                   'author': AuthorSerializer(fields=['name'])
                }
            }
        return base_config
