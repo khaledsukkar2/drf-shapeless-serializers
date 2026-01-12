@@ -17,4 +17,5 @@ Welcome to the DRF Shapeless Serializers documentation.
    features/nested_serializers
    features/custom_serializers
    features/inline_shapeless_model_serializers
+   features/shapeless_view_mixin
    examples
