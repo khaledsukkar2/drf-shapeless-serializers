@@ -6,35 +6,39 @@
 [![Django Packages](https://img.shields.io/badge/Published%20on-Django%20Packages-0c3c26)](https://djangopackages.org/packages/p/drf-shapeless-serializers/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 ## Motivation
+
 Traditional Django REST Framework serializers often lead to what’s known as “serializer hell” - a situation where developers:
 
-- Create numerous serializer variations for slightly different API endpoints
-- Duplicate code for simple field variations
-- Struggle with rigid and complex nested relationships
-- Maintain sprawling serializer classes that become hard to manage
+* Create numerous serializer variations for slightly different API endpoints
+* Duplicate code for simple field variations
+* Struggle with rigid and complex nested relationships
+* Maintain sprawling serializer classes that become hard to manage
 
 `drf-shapeless-serializers` was created to solve these pain points by introducing dynamic runtime configuration capabilities, allowing you to eliminate up to 80% of your serializer code while gaining unprecedented flexibility.
 
 ## Documentation
-https://drf-shapeless-serializers.readthedocs.io/en/latest/
+
+[https://drf-shapeless-serializers.readthedocs.io/en/latest/](https://drf-shapeless-serializers.readthedocs.io/en/latest/)
 
 ## Overview
 
-`drf-shapeless-serializers`  provides powerful mixins that extend Django REST Framework's serializers with dynamic configuration capabilities. By inheriting from our base classes, you can select fields at runtime, rename output keys dynamically, modify field attributes per-request, add and configure nested relationships on-the-fly and apply conditional field logic.
-All without creating multiple serializer classes and annoying nested relations. 
+`drf-shapeless-serializers` provides powerful mixins that extend Django REST Framework's serializers with dynamic configuration capabilities. By inheriting from our base classes, you can select fields at runtime, rename output keys dynamically, modify field attributes per-request, and add configured nested relationships on-the-fly.
 
 ## Installation
 
 ```bash
 pip install drf-shapeless-serializers
+
 ```
 
 **Add to your Django settings**:
+
 ```python
 INSTALLED_APPS = [
     # ... other apps
     'shapeless_serializers',
 ]
+
 ```
 
 ## Usage
@@ -42,6 +46,7 @@ INSTALLED_APPS = [
 ### Basic Setup
 
 1. **Define your shapeless serializer**:
+
 ```python
 from shapeless_serializers.serializers import ShapelessModelSerializer
   
@@ -59,9 +64,12 @@ class BookSerializer(ShapelessModelSerializer):
     class Meta:
         model = Book
         fields = '__all__'
+
 ```
 
 2. **Configure dynamically in views**:
+Instead of passing dictionaries, you now pass **instantiated serializers** into the `nested` parameter, allowing for a more Pythonic and type-safe configuration.
+
 ```python
 @api_view(['GET'])
 def book_detail(request, pk):
@@ -69,202 +77,131 @@ def book_detail(request, pk):
     serializer = BookSerializer(
         book,
         fields=['id', 'title', 'price', 'author'],
-        rename_fields={
-            'price': 'retail_price',
-            'id': 'book_id'
-        },
+        rename_fields={'price': 'retail_price', 'id': 'book_id'},
         nested={
-            'author': {
-                'serializer': AuthorSerializer,
-                'fields': ['id', 'bio', 'user'],
-                'rename_fields': {'bio': 'biography'},
-                'nested': {
-                    'user': {
-                        'serializer': UserSerializer,
-                        'fields': ['id','username', 'email'],
-                    }
+            'author': AuthorSerializer(
+                fields=['id', 'bio', 'user'],
+                rename_fields={'bio': 'biography'},
+                nested={
+                    'user': UserSerializer(fields=['id', 'username', 'email'])
                 }
-            }
+            )
         }
     )
     return Response(serializer.data)
+
 ```
 
-### Feature Highlights
+## Feature Highlights
 
-#### 1. Field Selection
-The `fields` parameter lets you cherry-pick exactly which fields to include in the output
+#### 1. Class-Based View (CBV) Support
+
+The `ShapelessViewMixin` allows you to define dynamic configurations directly on your ViewSets. This keeps your view logic clean and centralized.
 
 ```python
-AuthorSerializer(
-    author,
-    fields=['id', 'name', 'birth_date']
-)
+from shapeless_serializers.views import ShapelessViewMixin
+
+class BookViewSet(ShapelessViewMixin, viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    def get_serializer_fields(self):
+        if self.action == 'list':
+            return ['id', 'title', 'price']
+        return ['id', 'title', 'description', 'author', 'comments']
+
+    def get_serializer_nested(self):
+        if self.action == 'retrieve':
+            return {
+                'author': AuthorSerializer(fields=['name', 'bio']),
+                'comments': CommentSerializer(fields=['content', 'user'], many=True)
+            }
+        return {}
+
 ```
 
-#### 2. Field Attributes
-Pass the standard DRF serializers params in run-time
+#### 2. Field Selection
+
+The `fields` parameter lets you cherry-pick exactly which fields to include.
+
+```python
+AuthorSerializer(author, fields=['id', 'name', 'birth_date'])
+
+```
+
+#### 3. Field Attributes
+
+Pass standard DRF serializer params at runtime.
 
 ```python
 AuthorSerializer(
     author,
     field_attributes={
         'bio': {'help_text': 'Author biography'},
-        'address' : {'write_only' : True }
+        'address': {'write_only': True}
     }
 )
-```
 
-#### 3. Field Renaming
-`rename_fields` allows you to customize the output keys without changing your models.
-
-```python
-BookSerializer(
-    book,
-    rename_fields={
-        'price': 'retail_price',  # Output will show 'retail_price' instead of 'price'
-        'id': 'book_id'
-    }
-)
 ```
 
 #### 4. Nested Relationships
-The nested serializer configuration provides ultimate flexibility for relationships. You can define unlimited nesting levels while maintaining full control over each level's behavior. The configuration supports all standard DRF parameters such as `read_only` or `instance` alongside this package-specific features, allowing you to mix and match functionality as needed. Each nested serializer can itself be configured with fields selection, renaming, and even deeper nesting - creating truly dynamic relationship trees that adapt to your API requirements.
+
+Nested configuration supports unlimited depth. Each level can be customized with its own fields, renaming, and attributes.
 
 ```python
 AuthorSerializer(
     author,
     nested={
-        'books': {
-            'serializer': BookSerializer,
-            'fields': ['title', 'publish_year', 'publisher'],
-            'nested': {
-                'publisher': {
-                    'serializer': PublisherSerializer,
-                    'fields': ['name', 'country']
-                }
+        'books': BookSerializer(
+            fields=['title', 'publish_year', 'publisher'],
+            nested={
+                'publisher': PublisherSerializer(fields=['name', 'country'])
             }
-        }
+        )
     }
 )
+
 ```
 
-For complex nested structures, you can build and config relationships as deep as your API requires:
+For extremely complex structures, the syntax remains readable:
 
 ```python
- posts = BlogPost.objects.all()
- serializer = DynamicBlogPostSerializer(
-           posts,
-            fields=["id", "title", "author", "comments"],
-            rename_fields={"id": "post_identifier"},
-            nested={
-                "author": {
-                    "serializer": DynamicAuthorProfileSerializer,
-                    "fields": ["bio", "is_verified", 'user'],
-                    "rename_fields": {"bio": "author_biography"},
-                    "field_attributes": {
-                        "is_verified": {"help_text": "Verified status"}
-                    },
-                    "nested": {
-                        "user": {
-                            "serializer": UserSerializer,
-                            "fields": ["id", "username"],
-                            "rename_fields": {"username": "user_login"},
-                        }
-                    },
-                },
-                "comments": {
-                    "serializer": DynamicCommentSerializer,
-                    "fields": ["id", "content", "user", "replies"],
-                    "instance": posts.comments.filter(
-                        is_approved=True, parent__isnull=True
-                    ),
-                    "rename_fields": {"content": "comment_text"},
-                    "field_attributes": {"id": {"label": "Comment ID"}},
-                    "nested": {
-                        "user": {
-                            "serializer": UserSerializer,
-                            "fields": ["id", "username"],
-                            "rename_fields": {"username": "commenter_name"},
-                        },
-                        "replies": {
-                            "serializer": DynamicCommentSerializer,
-                            "fields": ["id", "content", "user"],
-                            "instance": lambda instance, ctx: instance.replies.filter(is_approved=True)
-                            "rename_fields": {"content": "reply_text"},
-                            "field_attributes": {"id": {"label": "Reply ID"}},
-                            "nested": {
-                                "user": {
-                                    "serializer": UserSerializer,
-                                    "fields": ["id", "username"],
-                                    "rename_fields": {"username": "replier_name"},
-                                }
-
-                            },
-
-                        },
-
-                    },
-
-                },
-
-            },
-
-        )
-```
-
-even the very complex and deep relations are supported:
-```python
-posts =  BlogPost.objects.all()
 serializer = DynamicBlogPostSerializer(
-            posts,
-            fields=["id", "title", "author", "tags", "comments", "likes"],
-            nested={
-                "author": {
-                    "serializer": DynamicAuthorProfileSerializer,
-                    "fields": ["id", "bio", "user"],
-                    "nested": {
-                        "user": {
-                            "serializer": UserSerializer,
-                            "fields": [
-                                "id",
-                                "email",
-                            ],
-                            "nested": {
-                                "author_profile": {
-                                    "serializer": DynamicAuthorProfileSerializer,
-                                    "fields": ["bio"],
-                                    "nested": {
-                                        "blog_posts": {
-                                            "serializer":DynamicBlogPostSerializer,
-                                            "fields": ["title"],
-                                            "nested": {
-                                                "tags": {
-                                                    "serializer": TagSerializer,
-                                                    "fields": ["name"],
-                                                    "many":True,
-                                                }
+    posts,
+    fields=["id", "title", "author", "comments"],
+    rename_fields={"id": "post_identifier"},
+    nested={
+        "author": DynamicAuthorProfileSerializer(
+            fields=["bio", "is_verified", "user"],
+            rename_fields={"bio": "author_biography"},
+            nested={
+                "user": UserSerializer(
+                    fields=["id", "username"],
+                    rename_fields={"username": "user_login"}
+                )
+            }
+        ),
+        "comments": DynamicCommentSerializer(
+            fields=["id", "content", "user", "replies"],
+            instance=posts.comments.filter(is_approved=True, parent__isnull=True),
+            rename_fields={"content": "comment_text"},
+            nested={
+                "user": UserSerializer(fields=["id", "username"]),
+                "replies": DynamicCommentSerializer(
+                    fields=["id", "content", "user"],
+                    instance=lambda instance, ctx: instance.replies.filter(is_approved=True),
+                    rename_fields={"content": "reply_text"}
+                )
+            }
+        )
+    }
+)
 
-                                            },
-
-                                        }
-
-                                    },
-
-                                }
-
-                            },
-
-                        }
-
-                    },
-                    },
-
-                },
-             )
 ```
+
 #### 5. Conditional Fields
-Choose the fields that will appear based on conditions easily:
+
+Include fields based on runtime logic (like user permissions):
 
 ```python
 AuthorSerializer(
@@ -273,38 +210,38 @@ AuthorSerializer(
         'email': lambda instance, ctx: ctx['request'].user.is_staff
     }
 )
+
 ```
 
 #### 6. Inline Shapeless Model Serializers
-Create serializers on-the-fly without defining a serializer class, perfect for one-off serialization needs:
+
+Create serializers on-the-fly without defining a class—perfect for one-off needs:
 
 ```python
-book = Book.objects.get(pk=1)
-
 serializer = InlineShapelessModelSerializer(
     book,
     model=Book,
-    fields=['title', 'author', 'price'],
+    fields=['title', 'author'],
     nested={
-        'author': {
-            'serializer': InlineShapelessModelSerializer,
-            'model': Author,
-            'fields': ['name', 'bio']
-        }
+        'author': InlineShapelessModelSerializer(
+            model=Author,
+            fields=['name', 'bio']
+        )
     }
 )
+
 ```
 
-## WHEN TO USE
+## When to Use
 
-- Building public APIs with multiple versions  
-- Projects needing different views of the same data
-- Rapidly evolving API requirements  
-- Any Django REST Framework project tired of serializer bloat
+* Building public APIs with multiple versions.
+* Projects needing different "views" of the same data (e.g., Summary vs. Detail).
+* Rapidly evolving API requirements where creating new classes is a bottleneck.
+* Any project suffering from "Serializer Bloat."
 
 ## Contributing
 
-We welcome contributions! please check the `CONTRIBUTING.md` file
+We welcome contributions! Please check the `CONTRIBUTING.md` file.
 
 ## License
 
@@ -312,4 +249,17 @@ This project is licensed under the MIT License. See the LICENSE file for details
 
 ## Acknowledgements
 
-Inspired by the flexibility needs of complex API systems. Special thanks to the Django REST Framework community for their foundational work .
+Inspired by the need for high-flexibility API systems. Special thanks to the Django REST Framework community.
+
+---
+
+## Support Me
+
+If you find this package useful, please consider supporting its development:
+
+*   **USDT (TRC20)**: `TEitNDQMm4upYmNvFeMpxTRGEJGdord3S5`
+*   **USDT (BEP20)**: `0xc491a2ba6f386ddbf26cdc906939230036473f5d`
+*   **BTC**: `13X8aZ23pFNCH2FPW6YpRTw4PGxo7AvFkN`
+
+
+
